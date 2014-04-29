@@ -63,13 +63,15 @@ class EWayMod(BaseEPayMod):
         return ph.getPluginType("EPayment").getPlugin("eWay").getOption("customer_username").getValue()
 
     def getFormHTML(self, prix, currency, conf, registrant, lang = "en_GB", secure=False):
+        conference = registrant.getConference()
         eway_data = {
             'CustomerID': self.getCustomerID(),
             'UserName':   self.getCustomerUsername(),
             'Amount':     "%.2f"%prix,
             'Currency':   currency,
-            'MerchantReference': 'indico_%s_%s' % (registrant.getConference().getId(), registrant.getId()),
-            'MerchantInvoice':  'indico_%s_%s' % (registrant.getConference().getId(), registrant.getId()),
+            'MerchantReference': "indico_%s_%s" % (conference.getId(), registrant.getId()),
+            'MerchantInvoice':  "indico_%s_%s" % (conference.getId(), registrant.getId()),
+            'InvoiceDescription': "Invoice for: %s - %s" % (conference.getTitle(), conference.getDescription()),
             'ReturnURL':  "%s"%localUrlHandlers.UHPayConfirmEWay.getURL(registrant),
             'CancelURL':  "%s"%localUrlHandlers.UHPayCancelEWay.getURL(registrant)
         }
