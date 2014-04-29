@@ -68,8 +68,8 @@ class EWayMod(BaseEPayMod):
             'UserName':   self.getCustomerUsername(),
             'Amount':     "%.2f"%prix,
             'Currency':   currency,
-            'MerchantReference': 'indico_',
-            'MerchantInvoice':  'indico_',
+            'MerchantReference': 'indico_%s_%s' % (registrant.getConference().getId(), registrant.getId()),
+            'MerchantInvoice':  'indico_%s_%s' % (registrant.getConference().getId(), registrant.getId()),
             'ReturnURL':  "%s"%localUrlHandlers.UHPayConfirmEWay.getURL(registrant),
             'CancelURL':  "%s"%localUrlHandlers.UHPayCancelEWay.getURL(registrant)
         }
@@ -128,15 +128,9 @@ class TransactionEWay(BaseTransaction):
         #                  </tr>
         #                </table>"""%(self._Data["payment_date"],self._Data["payer_id"], self._Data["mc_gross"], \
         #                     self._Data["mc_currency"], self._Data["verify_sign"])
-        b = open("/tmp/bbbb.txt", "w")
-        b.write(json.dumps(self._Data))
-        b.close()
         return json.dumps(self._Data)
 
     def getTransactionTxt(self):
-        c = open("/tmp/cccc.txt", "w")
-        c.write(json.dumps(self._Data))
-        c.close()
         return json.dumps(self._Data)
 #        return"""
 #\tPayment with:PayPal\n
